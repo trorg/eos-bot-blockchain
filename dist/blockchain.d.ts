@@ -1,4 +1,4 @@
-import { Endpoint, ChainID, Wallet, Action, SimpleAction, TransactConfig } from './interfaces';
+import { Endpoint, ChainID, Wallet, Action, SimpleAction, TransactConfig, QueryResult } from './interfaces';
 /**
  */
 export declare class Blockchain {
@@ -11,8 +11,7 @@ export declare class Blockchain {
     /**
      * Query any blockchain info
      */
-    query(method: string, ...args: any): Promise<any>;
-    queryTable(name: string, args: any): Promise<any>;
+    query(method: string, ...args: any): Promise<QueryResult>;
     /**
      * Send transaction to blockchain
      */

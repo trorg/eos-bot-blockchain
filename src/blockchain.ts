@@ -8,6 +8,7 @@ import {
   SimpleAction,
   Authorization,
   TransactConfig,
+  QueryResult,
 } from './interfaces';
 import { Rpc } from './rpc';
 
@@ -48,7 +49,7 @@ export class Blockchain {
   /**
    * Query any blockchain info
    */
-  public async query(method: string, ...args: any): Promise<any> {
+  public async query(method: string, ...args: any): Promise<QueryResult> {
     while (true) {
       try {
         return this.api.rpc[method](args);
@@ -63,11 +64,6 @@ export class Blockchain {
 
       throw new Error('Filed to fetch from RPC servers');
     }
-  }
-
-  public async queryTable(name: string, args: any): Promise<any> {
-    const { rows } = await this.query('get_table_rows', args);
-    return rows;
   }
 
   /**

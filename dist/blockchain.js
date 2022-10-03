@@ -63,12 +63,6 @@ class Blockchain {
             }
         });
     }
-    queryTable(name, args) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { rows } = yield this.query('get_table_rows', args);
-            return rows;
-        });
-    }
     /**
      * Send transaction to blockchain
      */

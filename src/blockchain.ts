@@ -2,14 +2,13 @@ import { Api, RpcError } from 'eosjs';
 import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig';
 import {
   Endpoint,
-  ChainID,
   Wallet,
   Action,
+  RpcFetchMethod,
   SimpleAction,
   Authorization,
   TransactConfig,
   QueryResult,
-  BlockchainConfigArgs,
 } from './interfaces';
 import { Rpc } from './rpc';
 
@@ -20,18 +19,20 @@ export class Blockchain {
   private api: Api;
   public wallet: Wallet;
 
-  constructor(endpoints: Endpoint[], public chainId: ChainID, args: BlockchainConfigArgs = {}) {
-    if (!endpoints.length) {
-      throw new Error('Endpoints length must me greater than 0');
-    }
-
+  constructor(args: {
+    chainId: string,
+    enpoints?: Endpoint[],
+    wallet?: Wallet,
+    fetch?: RpcFetchMethod,
+  }) {
+    const { chainId } = args;
     let signatureProvider = null;
     if (args.wallet) {
       this.wallet = args.wallet;
       signatureProvider = new JsSignatureProvider(this.wallet.keys);
     }
 
-    const rpc = new Rpc(endpoints, { fetch: args.fetch });
+    const rpc = new Rpc(args);
     this.api = new Api({
       chainId,
       rpc,

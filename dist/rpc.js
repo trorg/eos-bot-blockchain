@@ -13,6 +13,31 @@ exports.Rpc = void 0;
 const eosjs_1 = require("eosjs");
 const node_fetch_1 = require("node-fetch");
 const random_useragent_1 = require("random-useragent");
+const defaultEndpoints = [
+    'https://wax.greymass.com',
+    'https://wax.eosphere.io',
+    'https://wax.cryptolions.io',
+    'https://api.waxsweden.org',
+    'https://waxapi.ledgerwise.io',
+    'https://apiwax.3dkrender.com',
+    'https://wax.blacklusion.io',
+    'https://wax.dapplica.io',
+    'https://wax-api.eosiomadrid.io',
+    'https://wax.eosdac.io',
+    'https://api.wax.liquidstudios.io',
+    'https://wax.pink.gg',
+    'https://wax.eosrio.io',
+    'https://api.wax.bountyblok.io',
+    'https://wax.eosdublin.io',
+    'https://api.tokengamer.io',
+    'https://wax.eosusa.news',
+    'https://wax-bp.wizardsguild.one',
+    'https://wax.eu.eosamsterdam.net',
+    'https://wax.blokcrafters.io',
+    'https://api.wax.alohaeos.com',
+    'https://wax.hkeos.com',
+    'https://api.wax.greeneosio.com',
+];
 /**
  * Default fetch method
  */
@@ -38,12 +63,11 @@ const defaultFetch = (path, args) => __awaiter(void 0, void 0, void 0, function*
     return response;
 });
 class Rpc extends eosjs_1.JsonRpc {
-    constructor(endpoints, args = {}) {
-        if (!args.fetch) {
-            args.fetch = node_fetch_1.default;
-        }
-        super(endpoints[0], args);
-        this.endpoints = this.endpoints.map((endpoint) => {
+    constructor(args = {}) {
+        let fetch = args.fetch ? args.fetch : defaultFetch;
+        const endpoints = args.endpoints.length > 0 ? args.endpoints : defaultEndpoints;
+        super(endpoints[0], { fetch });
+        this.endpoints = endpoints.map((endpoint) => {
             if (endpoint[endpoint.length - 1] == '/') {
                 endpoint = endpoint.substr(0, endpoint.length - 1);
             }
@@ -52,10 +76,11 @@ class Rpc extends eosjs_1.JsonRpc {
     }
     fetch(path, body) {
         const _super = Object.create(null, {
-            fetch: { get: () => super.fetch }
+            endpoint: { get: () => super.endpoint, set: v => super.endpoint = v },
+            fetch: { get: () => super.fetch, set: v => super.fetch = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            this.endpoint = this.endpoints[Math.floor(Math.random() * this.endpoints.length)];
+            _super.endpoint = this.endpoints[Math.floor(Math.random() * this.endpoints.length)];
             return _super.fetch.call(this, path, body);
         });
     }

@@ -16,17 +16,14 @@ const rpc_1 = require("./rpc");
 /**
  */
 class Blockchain {
-    constructor(endpoints, chainId, args = {}) {
-        this.chainId = chainId;
-        if (!endpoints.length) {
-            throw new Error('Endpoints length must me greater than 0');
-        }
+    constructor(args) {
+        const { chainId } = args;
         let signatureProvider = null;
         if (args.wallet) {
             this.wallet = args.wallet;
             signatureProvider = new eosjs_jssig_1.JsSignatureProvider(this.wallet.keys);
         }
-        const rpc = new rpc_1.Rpc(endpoints, { fetch: args.fetch });
+        const rpc = new rpc_1.Rpc(args);
         this.api = new eosjs_1.Api({
             chainId,
             rpc,

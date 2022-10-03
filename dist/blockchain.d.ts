@@ -1,11 +1,15 @@
-import { Endpoint, ChainID, Wallet, Action, SimpleAction, TransactConfig, QueryResult, BlockchainConfigArgs } from './interfaces';
+import { Endpoint, Wallet, Action, RpcFetchMethod, SimpleAction, TransactConfig, QueryResult } from './interfaces';
 /**
  */
 export declare class Blockchain {
-    chainId: ChainID;
     private api;
     wallet: Wallet;
-    constructor(endpoints: Endpoint[], chainId: ChainID, args?: BlockchainConfigArgs);
+    constructor(args: {
+        chainId: string;
+        enpoints?: Endpoint[];
+        wallet?: Wallet;
+        fetch?: RpcFetchMethod;
+    });
     get rpc(): import("eosjs").JsonRpc;
     get signatureProvider(): import("eosjs/dist/eosjs-api-interfaces").SignatureProvider;
     /**

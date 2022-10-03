@@ -69,9 +69,4 @@ export interface Wallet {
 }
 
 export type Endpoint = string;
-export type ChainID = string;
 export type RpcFetchMethod = (input?: any, init?: any) => Promise<any>;
-export interface BlockchainConfigArgs {
-  wallet?: Wallet,
-  fetch?: RpcFetchMethod;
-}

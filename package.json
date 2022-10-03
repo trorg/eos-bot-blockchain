@@ -1,5 +1,5 @@
 {
-  "name": "eos-bot-clockchain",
+  "name": "eos-bot-blockchain",
   "version": "1.0.0",
   "description": "Blockchain helper for bot engine",
   "main": "dist/index.js",

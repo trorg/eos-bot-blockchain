@@ -1,6 +1,6 @@
 {
   "name": "eos-bot-blockchain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Blockchain helper for bot engine",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -11,8 +11,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rpc = void 0;
 const eosjs_1 = require("eosjs");
+const node_fetch_1 = require("node-fetch");
+const random_useragent_1 = require("random-useragent");
+/**
+ * Default fetch method
+ */
+const defaultFetch = (path, args) => __awaiter(void 0, void 0, void 0, function* () {
+    const ripa = [];
+    for (let i = 0; i <= 3; i++) {
+        ripa.push(Math.floor(Math.random() * 249) + 23);
+    }
+    const rip = ripa.join('.');
+    const controller = new AbortController();
+    const config = {
+        headers: {
+            'User-Agent': random_useragent_1.default.getRandom(),
+            'X-Forwarded-For': rip,
+            'X-Real-IP': rip,
+        },
+        signal: controller.signal,
+    };
+    args = Object.assign(Object.assign({}, args), config);
+    const timeout = setTimeout(controller.abort, 40000);
+    const response = yield (0, node_fetch_1.default)(path, args);
+    clearTimeout(timeout);
+    return response;
+});
 class Rpc extends eosjs_1.JsonRpc {
     constructor(endpoints, args = {}) {
+        if (!args.fetch) {
+            args.fetch = node_fetch_1.default;
+        }
         super(endpoints[0], args);
         this.endpoints = this.endpoints.map((endpoint) => {
             if (endpoint[endpoint.length - 1] == '/') {

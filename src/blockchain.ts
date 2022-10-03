@@ -9,6 +9,7 @@ import {
   Authorization,
   TransactConfig,
   QueryResult,
+  BlockchainConfigArgs,
 } from './interfaces';
 import { Rpc } from './rpc';
 
@@ -17,18 +18,20 @@ import { Rpc } from './rpc';
  */
 export class Blockchain {
   private api: Api;
+  public wallet: Wallet;
 
-  constructor(endpoints: Endpoint[], public chainId: ChainID, public wallet?: Wallet) {
+  constructor(endpoints: Endpoint[], public chainId: ChainID, args: BlockchainConfigArgs = {}) {
     if (!endpoints.length) {
       throw new Error('Endpoints length must me greater than 0');
     }
 
     let signatureProvider = null;
-    if (wallet) {
-      signatureProvider = new JsSignatureProvider(wallet.keys);
+    if (args.wallet) {
+      this.wallet = args.wallet;
+      signatureProvider = new JsSignatureProvider(this.wallet.keys);
     }
 
-    const rpc = new Rpc(endpoints);
+    const rpc = new Rpc(endpoints, { fetch: args.fetch });
     this.api = new Api({
       chainId,
       rpc,
